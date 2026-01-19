@@ -835,10 +835,6 @@ a {
       font-style: normal;
       line-height: 1.5em;
 
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-
       // only font-size changes on mobile (padding stays consistent)
       @media screen and (max-width: $single-column-max-width) {
         font-size: $single-column-post-title-size;
@@ -891,10 +887,6 @@ a {
       font-weight: 400;
       font-style: normal;
       line-height: 1.5em;
-
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
 
       @media screen and (max-width: $single-column-max-width) {
         font-size: $single-column-post-title-size;
@@ -964,6 +956,27 @@ a {
     padding-top: 20px;
     padding-bottom: 20px;
   }
+  
+  .post-head-wrapper .post-title,
+  .post-head-wrapper-text-only .post-title {
+    background: transparent !important;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+
+    border: none;
+    border-radius: 0;
+
+    padding: 24px 0 14px 0;
+    margin-bottom: 18px;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .post-meta,
+  .post-meta * {
+    color: rgba(0, 0, 0, 0.55);
+  }
+  
 }
 
 

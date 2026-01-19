@@ -1,21 +1,39 @@
 @import "journal";
 
+// Accent tuning for dark mode
 $light-accent: lighten($color-accent, 10%);
 $deep-light-accent: lighten($color-accent, 30%);
-$dark-mode-text: darken(#fff, 10%);
 
-$dark-mode-back-container-background: #212121;
-$dark-mode-front-container-background: #282828;
+// Dark theme palette
+$dark-mode-text: darken(#fff, 10%); // ~ #e6e6e6
+$dark-mode-muted: rgba(255, 255, 255, 0.7);
+$dark-mode-border: rgba(255, 255, 255, 0.08);
+
+$dark-mode-back-container-background: #212121;  // page + side panels
+$dark-mode-front-container-background: #282828; // main content "paper"
+
+// Helper surface for subtle contrast (toc, cards, etc.)
+$dark-mode-surface: rgba(255, 255, 255, 0.04);
+$dark-mode-code-bg: rgba(255, 255, 255, 0.06);
 
 body.night {
   background: $dark-mode-back-container-background;
-  :root {
-    --color_555: #ccc;
-    --color_ededed: #000;
-  }
+
+  // Theme expects these CSS vars in some places
+  --color_555: #ccc;
+  --color_ededed: #000;
+
+  // -------------------------
+  // Global text + media
+  // -------------------------
+  color: $dark-mode-text;
 
   img {
     opacity: 0.8;
+  }
+
+  table * {
+    color: $dark-mode-text;
   }
 
   blockquote {
@@ -36,11 +54,17 @@ body.night {
     }
   }
 
+  // Inline code (non-highlighted)
   code:not([data-lang]) {
     color: $deep-light-accent !important;
+    background: $dark-mode-code-bg;
   }
 
+  // Code blocks
   pre {
+    background: $dark-mode-code-bg;
+    border: 1px solid $dark-mode-border;
+
     code:not([data-lang]) {
       background: none;
       color: $dark-mode-text !important;
@@ -48,33 +72,45 @@ body.night {
     color: $dark-mode-text !important;
   }
 
-  table * {
-    color: $dark-mode-text;
+  // -------------------------
+  // Panels / containers
+  // -------------------------
+  .side-container,
+  .extra-container,
+  .single-column-nav-container .nav-background,
+  .single-column-drawer-container .drawer-content {
+    background: $dark-mode-back-container-background !important;
   }
+
+  // -------------------------
+  // Comments / Gitalk-ish
+  // -------------------------
   .gt-btn * {
     color: black !important;
   }
-  .gt-header-textarea {
-    background: lighten($dark-mode-back-container-background, 20%)  !important;
-  }
+
+  .gt-header-textarea,
   .gt-header-preview {
-    background: lighten($dark-mode-back-container-background, 20%)  !important;
+    background: lighten($dark-mode-back-container-background, 20%) !important;
   }
 
+  // -------------------------
+  // Left nav (desktop)
+  // -------------------------
   .side-container {
     $nav-item-hover-background-alpha: 0.02;
     $nav-item-hover-indicator-alpha: 0.6;
     $nav-item-hover-color-darken: 30%;
     $nav-item-active-background-alpha: 0.03;
     $nav-item-active-color-darken: 20%;
+
     * {
       color: $dark-mode-text;
     }
+
     .nav-head {
-      //border-right: 4px solid $color-accent;
       &:hover {
-        border-right: 2px solid
-          rgba($color-accent, $nav-item-hover-indicator-alpha);
+        border-right: 2px solid rgba($color-accent, $nav-item-hover-indicator-alpha);
         background: rgba($color-accent, $nav-item-hover-background-alpha);
         color: lighten($color-accent, $nav-item-hover-color-darken);
       }
@@ -90,56 +126,102 @@ body.night {
       $nav-item-hover-color-lighten: 30%;
       $nav-item-active-background-alpha: 0.1;
       $nav-item-active-color-lighten: 20%;
+
       flex-grow: 1;
+
       .nav-link-item {
         color: $dark-mode-text !important;
-        //border-right: 4px solid transparent;
+
         &:hover {
-          border-right: 2px solid
-            rgba($color-accent, $nav-item-hover-indicator-alpha);
-          color: lighten(
-            $color-accent,
-            $nav-item-hover-color-lighten
-          ) !important;
+          border-right: 2px solid rgba($color-accent, $nav-item-hover-indicator-alpha);
+          background: rgba($color-accent, 0.02);
+          color: lighten($color-accent, $nav-item-hover-color-lighten) !important;
         }
+
         &.active {
           border-right: 2px solid $color-accent;
           background: rgba($color-accent, $nav-item-active-background-alpha);
-          color: lighten(
-            $color-accent,
-            $nav-item-active-color-lighten
-          ) !important;
+          color: lighten($color-accent, $nav-item-active-color-lighten) !important;
         }
       }
     }
   }
+
+  // -------------------------
+  // Main stream
+  // -------------------------
   .stream-container {
-    .post-head-wrapper-text-only * {
+    background: $dark-mode-back-container-background;
+
+    // IMPORTANT: don't blanket-color all descendants; it breaks links/meta.
+    .post-head-wrapper-text-only {
       color: $dark-mode-text;
     }
+
+    .post-list-container,
     .post {
-      background: $dark-mode-front-container-background;
+      background: $dark-mode-front-container-background !important;
+
       @media screen and (max-width: $single-column-max-width) {
-        background: $dark-mode-back-container-background;
-      }
-      .post-pagination a:not([href]) {
-        color: $dark-mode-text;
-      }
-      .post-comment-wrapper * {
-        color: $dark-mode-text;
+        background: $dark-mode-back-container-background !important;
       }
     }
+
+    // Subtle separators / dividers
+    hr,
+    .post-pagination,
+    .post-body-wrapper {
+      border-color: $dark-mode-border !important;
+    }
+
+    // Fix "white slab" title backgrounds from journal.scss
+    .post {
+
+        // Title container (both image + text-only variants)
+        .post-head-wrapper .post-title,
+        .post-head-wrapper-text-only .post-title {
+
+          background: transparent !important;
+          backdrop-filter: none;
+          -webkit-backdrop-filter: none;
+
+          border: none;
+          border-radius: 0;
+
+          // Typography-first title
+          color: #f5f5f5;
+
+          // Editorial spacing
+          padding: 24px 0 14px 0;
+          margin-bottom: 18px;
+
+          // Subtle divider instead of a box
+          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    }
+
+    // Subtitle (if present)
+    .post-subtitle {
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    // Meta text under title
+    .post-meta,
+    .post-meta * {
+      color: rgba(255, 255, 255, 0.55);
+    }
+
+  }
+
+    // List view hover behavior
     .post-list-container {
-      background: $dark-mode-front-container-background;
-      @media screen and (max-width: $single-column-max-width) {
-        background: $dark-mode-back-container-background;
-      }
       &,
       > * {
         .post-item-wrapper {
           * {
             color: $dark-mode-text;
           }
+
           .post-item-info-wrapper {
             @media screen and (max-width: $single-column-max-width) {
               box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
@@ -151,6 +233,7 @@ body.night {
             box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
             background: $dark-mode-front-container-background;
           }
+
           &:not(.post-item-wrapper-no-hover):hover {
             background: rgba(255, 255, 255, 0.03);
             * {
@@ -162,22 +245,28 @@ body.night {
     }
   }
 
+  // -------------------------
+  // Mobile top nav
+  // -------------------------
   .single-column-nav-container {
     * {
       color: $dark-mode-text;
     }
+
     @media screen and (max-width: $single-column-max-width) {
       .nav-dropdown-toggle {
         &:hover {
           color: #3f587d !important;
         }
       }
+
       .navbar-brand {
         color: $dark-mode-text;
         &:hover {
           color: $dark-mode-text;
         }
       }
+
       .nav-background {
         background: $dark-mode-front-container-background;
         box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
@@ -185,12 +274,16 @@ body.night {
     }
   }
 
+  // -------------------------
+  // Mobile header section
+  // -------------------------
   .single-column-header-container {
     @media screen and (max-width: $single-column-max-width) {
       * {
-        font-family: $sans-preferred-font-list;
+        font-family: inherit;
         color: $deep-light-accent;
       }
+
       .single-column-header-title {
         color: $dark-mode-text;
       }
@@ -200,16 +293,22 @@ body.night {
     }
   }
 
+  // -------------------------
+  // Mobile drawer menu
+  // -------------------------
   .single-column-drawer-container {
     @media screen and (max-width: $single-column-max-width) {
       .drawer-content {
         background: $dark-mode-front-container-background;
+
         .toc {
           background-color: lighten($dark-mode-front-container-background, 10%);
         }
+
         .drawer-menu {
           .drawer-menu-item {
             color: $dark-mode-text;
+
             &.active {
               border-right: 2px solid $color-accent;
               color: $light-accent;
@@ -220,23 +319,36 @@ body.night {
     }
   }
 
+  // -------------------------
+  // Footer
+  // -------------------------
   #single-column-footer {
     color: $dark-mode-text;
   }
 
+  // -------------------------
+  // TOC / Catalog
+  // -------------------------
   .toc {
-    background-color: $dark-mode-front-container-background;
+    background-color: $dark-mode-surface !important;
+    border: 1px solid $dark-mode-border;
+
     * {
       color: $dark-mode-text;
     }
+
     a {
       color: $dark-mode-text;
     }
+
     .toc-active {
       color: $light-accent !important;
     }
   }
 
+  // -------------------------
+  // Article typography (content)
+  // -------------------------
   .post-body p,
   h1,
   h2,
@@ -246,26 +358,30 @@ body.night {
   h6,
   li {
     color: $dark-mode-text;
+
     *:not(a) {
       color: $dark-mode-text;
     }
   }
+
   .pagination * {
     color: $dark-mode-text;
   }
 
+  // Valine?
   .vwrap * {
     color: $dark-mode-text !important;
   }
-
   .vcontent p {
     color: $dark-mode-text !important;
   }
 
+  // Google search box embedded
   .gsc-control-searchbox-only table * {
     color: black !important;
   }
 
+  // Tag chips
   .tags {
     .tag a {
       color: white;
@@ -273,5 +389,10 @@ body.night {
         color: white;
       }
     }
+  }
+
+  // Selection in dark mode
+  ::selection {
+    background: rgba($color-accent, 0.35);
   }
 }
