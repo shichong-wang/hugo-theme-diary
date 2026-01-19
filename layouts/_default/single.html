@@ -26,11 +26,7 @@
                     </div>
                     {{ end }}
                     <div class="post-meta">
-                        {{ if .Params.date}}
-                        <time itemprop="datePublished">
-                            {{ i18n "format_date_tosec" .PublishDate }}
-                        </time>
-                        {{ end }}
+
 
                         {{ if .Params.categories }}
                             <i class="material-icons" style="">folder</i>
